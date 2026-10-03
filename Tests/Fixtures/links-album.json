@@ -1,0 +1,97 @@
+{
+  "entityUniqueId": "ITUNES_ALBUM::1793146044",
+  "userCountry": "DE",
+  "pageUrl": "https://album.link/i/1793146044",
+  "entitiesByUniqueId": {
+    "ITUNES_ALBUM::1793146044": {
+      "id": "1793146044",
+      "type": "album",
+      "title": "Perspectives Concertantes",
+      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
+      "thumbnailWidth": 512,
+      "thumbnailHeight": 512,
+      "apiProvider": "itunes",
+      "platforms": [
+        "appleMusic",
+        "itunes"
+      ]
+    },
+    "AMAZON_ALBUM::B0DV5P8V78": {
+      "id": "B0DV5P8V78",
+      "type": "album",
+      "title": "Perspectives Concertantes",
+      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
+      "thumbnailWidth": 512,
+      "thumbnailHeight": 512,
+      "apiProvider": "amazon",
+      "platforms": [
+        "amazonMusic",
+        "amazonStore"
+      ]
+    },
+    "TIDAL_ALBUM::414051173": {
+      "id": "414051173",
+      "type": "album",
+      "title": "Perspectives Concertantes",
+      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
+      "thumbnailWidth": 512,
+      "thumbnailHeight": 512,
+      "apiProvider": "tidal",
+      "platforms": [
+        "tidal"
+      ]
+    },
+    "YANDEX_ALBUM::35165246": {
+      "id": "35165246",
+      "type": "album",
+      "title": "Perspectives Concertantes",
+      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
+      "thumbnailWidth": 512,
+      "thumbnailHeight": 512,
+      "apiProvider": "yandex",
+      "platforms": [
+        "yandex"
+      ]
+    }
+  },
+  "linksByPlatform": {
+    "appleMusic": {
+      "country": "DE",
+      "url": "https://geo.music.apple.com/de/album/_/1793146044?mt=1&app=music&ls=1",
+      "nativeAppUriMobile": "music://itunes.apple.com/de/album/_/1793146044?mt=1&app=music&ls=1",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/de/album/_/1793146044?mt=1&app=music&ls=1",
+      "entityUniqueId": "ITUNES_ALBUM::1793146044"
+    },
+    "itunes": {
+      "country": "DE",
+      "url": "https://geo.music.apple.com/de/album/_/1793146044?mt=1&app=itunes&ls=1",
+      "nativeAppUriMobile": "itmss://itunes.apple.com/de/album/_/1793146044?mt=1&app=itunes&ls=1",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/de/album/_/1793146044?mt=1&app=itunes&ls=1",
+      "entityUniqueId": "ITUNES_ALBUM::1793146044"
+    },
+    "amazonMusic": {
+      "country": "DE",
+      "url": "https://music.amazon.com/albums/B0DV5P8V78",
+      "entityUniqueId": "AMAZON_ALBUM::B0DV5P8V78"
+    },
+    "amazonStore": {
+      "country": "US",
+      "url": "https://amazon.com/dp/B0DV5P8V78",
+      "entityUniqueId": "AMAZON_ALBUM::B0DV5P8V78"
+    },
+    "tidal": {
+      "country": "DE",
+      "url": "https://listen.tidal.com/album/414051173",
+      "entityUniqueId": "TIDAL_ALBUM::414051173"
+    },
+    "yandex": {
+      "country": "RU",
+      "url": "https://music.yandex.ru/album/35165246",
+      "entityUniqueId": "YANDEX_ALBUM::35165246"
+    }
+  }
+}
