@@ -4,6 +4,13 @@ Odesli (song.link) for [glitchr/omnisong](https://github.com/glitchr-studio/omni
 a URL on any platform, or a platform's own id - to the same song or album on every other one,
 through the application's HTTP client.
 
+```php
+$odesli = (new OdesliCatalogFactory($http))->create(['api_key' => '...', 'country' => 'DE']);   // $http: the application's HTTP client; none given, the factory makes its own
+```
+
+No framework needed: the package requires `glitchr/omnisong` and `symfony/http-client`. In a
+Symfony application, the same through the bundle's configuration:
+
 ```yaml
 omnisong:
     catalogs:
