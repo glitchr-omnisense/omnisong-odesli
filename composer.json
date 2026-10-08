@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Omnisong Odesli: one link (or an ISRC, a UPC) to the same song or album on every platform, through song.link's API.",
     "keywords": ["music", "odesli", "songlink", "omnisong"],
-    "license": "LGPL-3.0-or-later",
+    "license": "MIT",
     "authors": [{"name": "Marco Meyer", "email": "marco.meyer@glitchr.io"}],
     "require": {
         "php": ">=8.2",
