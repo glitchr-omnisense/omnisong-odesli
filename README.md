@@ -1,6 +1,6 @@
 # omnisong/odesli
 
-Odesli (song.link) for [omniscient/omnisong](https://github.com/glitchr-studio/omnisong): one link -
+Odesli (song.link) for [omnisense/omnisong](https://github.com/glitchr-omnisense/omnisong): one link -
 a URL on any platform, or a platform's own id - to the same song or album on every other one,
 through the application's HTTP client.
 
@@ -8,7 +8,7 @@ through the application's HTTP client.
 $odesli = (new OdesliCatalogFactory($http))->create(['api_key' => '...', 'country' => 'DE']);   // $http: the application's HTTP client; none given, the factory makes its own
 ```
 
-No framework needed: the package requires `omniscient/omnisong` and `symfony/http-client`. In a
+No framework needed: the package requires `omnisense/omnisong` and `symfony/http-client`. In a
 Symfony application, the same through the bundle's configuration:
 
 ```yaml
