@@ -161,4 +161,30 @@ final class OdesliCatalogTest extends TestCase
             self::assertSame(400, $e->status);
         }
     }
+
+    /**
+     * Odesli not reached: nothing of the key anywhere in what a log of the whole chain writes -
+     * the messages, the previous exception (a copy of the HTTP client's, its class kept), the
+     * traces' arguments when zend.exception_ignore_args is off.
+     */
+    public function testNoPartOfAnUnreachableChainHoldsTheKey(): void
+    {
+        $ignoreArgs = ini_set('zend.exception_ignore_args', '0');
+        $http = new MockHttpClient(static function (string $method, string $url): never {
+            throw new \Symfony\Component\HttpClient\Exception\TransportException(\sprintf('Could not resolve host: api.song.link for "%s".', $url));
+        });
+        try {
+            (new OdesliCatalogFactory($http))->create(['api_key' => 'odesli-key-123'])->links(Reference::url(self::ALBUM));
+            self::fail('no exception');
+        } catch (\Omnisong\Exception\UnavailableException $e) {
+            self::assertInstanceOf(\Symfony\Component\HttpClient\Exception\TransportException::class, $e->getPrevious());
+            self::assertStringContainsString('key=***', $e->getMessage());
+            for ($one = $e; null !== $one; $one = $one->getPrevious()) {
+                self::assertFalse(str_contains($one->getMessage(), 'odesli-key-123'), $one->getMessage());
+                self::assertFalse(str_contains(print_r($one->getTrace(), true), 'odesli-key-123'), 'a trace holds the key');
+            }
+        } finally {
+            ini_set('zend.exception_ignore_args', false !== $ignoreArgs ? $ignoreArgs : '1');
+        }
+    }
 }

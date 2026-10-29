@@ -7,6 +7,7 @@ use Omnisong\Exception\NotSupportedException;
 use Omnisong\Exception\ProviderException;
 use Omnisong\Exception\RateLimitedException;
 use Omnisong\Exception\UnavailableException;
+use Omnisong\Http\Redaction;
 use Omnisong\Model\PlatformLink;
 use Omnisong\Model\PlatformLinks;
 use Omnisong\Model\Reference;
@@ -126,12 +127,15 @@ final class OdesliCatalog implements CatalogInterface
         }
 
         try {
-            $response = $this->http->request('GET', rtrim($this->baseUri, '/').'/links', ['query' => $query, 'headers' => ['Accept' => 'application/json']]);
+            $response = $this->http->request('GET', $url = rtrim($this->baseUri, '/').'/links', $options = ['query' => $query, 'headers' => ['Accept' => 'application/json']]);
             $status = $response->getStatusCode();
             $body = $response->getContent(false);
             $headers = $response->getHeaders(false);
         } catch (TransportExceptionInterface $e) {
-            throw new UnavailableException('odesli', $e->getMessage(), null, $e);
+            // The key, in the query, masked in the message and the previous, a copy; no trace keeps the options.
+            $secrets = Redaction::secrets($url, $options);
+
+            throw Redaction::withoutArguments(new UnavailableException('odesli', Redaction::text($e->getMessage(), $secrets), null, Redaction::copy($e, $secrets)));
         }
         $answer = json_decode($body, true);
         $code = \is_array($answer) ? (string) ($answer['code'] ?? '') : '';
