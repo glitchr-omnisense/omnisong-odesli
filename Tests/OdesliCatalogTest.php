@@ -115,6 +115,18 @@ final class OdesliCatalogTest extends TestCase
         }
     }
 
+    /** Retry-After may be an HTTP date (RFC 9110 §10.2.3): the seconds until then. */
+    public function testARetryAfterDateIsTheSecondsUntilThen(): void
+    {
+        try {
+            $this->catalog(new MockResponse('', ['http_code' => 429, 'response_headers' => ['Retry-After' => gmdate(\DATE_RFC7231, time() + 120)]]))->links(Reference::url(self::ALBUM));
+            self::fail('RateLimitedException expected');
+        } catch (RateLimitedException $e) {
+            self::assertGreaterThanOrEqual(118, $e->retryAfter);
+            self::assertLessThanOrEqual(120, $e->retryAfter);
+        }
+    }
+
     public function testDownUnreachableOrWithoutItsKeyIsUnavailable(): void
     {
         $responses = [

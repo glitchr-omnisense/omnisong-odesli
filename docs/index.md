@@ -142,8 +142,7 @@ omnisong:
 
 Under the aggregator, every `UnavailableException` skips Odesli and names it in `$incomplete`.
 
-> [!WARNING]
-> Known defect: `Retry-After` written as an HTTP date is read as `retryAfter = 0`, where the seconds until that date (or null) are expected.
+`Retry-After`, in seconds or as an HTTP date, is the exception's `retryAfter`.
 
 The package's `composer.json` description says it reads "an ISRC, a UPC": it reads neither (above).
 

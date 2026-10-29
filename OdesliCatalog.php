@@ -137,7 +137,7 @@ final class OdesliCatalog implements CatalogInterface
         $code = \is_array($answer) ? (string) ($answer['code'] ?? '') : '';
 
         if (429 === $status) {
-            throw new RateLimitedException('odesli', isset($headers['retry-after'][0]) ? (int) $headers['retry-after'][0] : null);
+            throw new RateLimitedException('odesli', self::retryAfter($headers['retry-after'][0] ?? null));
         }
         if (404 === $status || (400 === $status && 'could_not_resolve_entity' === $code)) {
             return $this->answers[$memo] = null;
@@ -158,4 +158,19 @@ final class OdesliCatalog implements CatalogInterface
 
         return $this->answers[$memo] = $answer;
     }
+
+    /** Retry-After in seconds, or as an HTTP date (RFC 9110 §10.2.3): the seconds until then, at least 1. */
+    private static function retryAfter(?string $value): ?int
+    {
+        if (null === $value || '' === trim($value)) {
+            return null;
+        }
+        if (ctype_digit(trim($value))) {
+            return (int) $value;
+        }
+        $at = strtotime($value);
+
+        return false === $at ? null : max(1, $at - time());
+    }
+
 }
