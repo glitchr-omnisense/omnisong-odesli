@@ -1,0 +1,37 @@
+{
+    "$schema": "https://github.com/glitchr-omnisense/contracts/blob/1.x/resources/usage-policy.schema.json",
+    "provider": "odesli",
+    "rateLimits": null,
+    "rights": {
+        "commercial": "unknown",
+        "openSourceRequired": null,
+        "caching": {
+            "permission": "unknown",
+            "maxTtl": null
+        },
+        "storage": "unknown",
+        "redistribution": "unknown",
+        "attribution": {
+            "required": false,
+            "text": null,
+            "url": null,
+            "where": []
+        },
+        "licence": null
+    },
+    "requirements": {
+        "key": true,
+        "userAgent": {
+            "required": false,
+            "pattern": null
+        }
+    },
+    "provenance": {
+        "terms": "https://odesli.co/terms",
+        "policy": "https://linktree.notion.site/API-d0ebe08a5e304a55928405eb682f6741",
+        "verifiedAt": "2026-11-10",
+        "declaredBy": "maintainer",
+        "contact": "developers@song.link",
+        "notes": "Nothing here is published in a form that could be read on 2026-11-10: the API page (a Notion page) renders nothing without a browser, and https://odesli.co/terms redirects to a Google Drive document. The limits are unknown: the keyless access was limited to 10 requests a minute (the figure the API page gave and its clients repeat), and it is withdrawn - a call without a key answers 401 PUBLIC_API_ACCESS_DEPRECATED (seen by this package on 2026-10-03) -; the limit with a key is agreed with Odesli (developers@song.link), not published. Commercial use, caching, storage, redistribution and attribution are not stated anywhere readable: unknown, a site asks Odesli. The links Odesli gives open Spotify, Apple Music, Deezer, YouTube and the others: their badge and logo rules are in omnisong's docs/policies.md."
+    }
+}

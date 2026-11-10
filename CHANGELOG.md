@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Its usage policy as data, `policy.json` (`extra.omnisense.policy`, `usagePolicy()`), verified 2026-11-10: nothing readable that day, so limits and rights unknown, a key required (the keyless access answers 401). The factory gives the catalogue its wait (omnisense/contracts' `Backoff`): a 429's `Retry-After`, a 503's, or a `RateLimit` field with nothing left holds the next calls, a `RateLimitedException` with nothing sent; `sentRequests()` counts the requests sent, so the registry's guard counts no answer held in memory. Requires `omnisense/contracts`. PHPStan at level max, the existing errors in `phpstan-baseline.neon`.
+
 ### Fixed
 
 - An unreachable Odesli no longer carries the key: the `UnavailableException` quoted the HTTP

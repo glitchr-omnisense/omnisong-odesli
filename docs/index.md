@@ -155,6 +155,15 @@ album on every platform; an id is asked by platform, type and id; the release ha
 neither a UPC nor an ISRC is read; unknown is empty; 429 says when to come back; down, unreachable
 or keyless is unavailable, naming the key; any other refusal is the provider's error.
 
+## Usage policy
+
+`policy.json` (`OdesliCatalog::POLICY`, `extra.omnisense.policy`): nothing could be read on
+2026-11-10 (the API page renders nothing without a browser, the terms are a Google Drive document),
+so the limits and rights are unknown and a key is required. Ask developers@song.link for your key's
+limit and tighten the policy with it (`policy: {rateLimits: [...]}`). A 429 and its `Retry-After`,
+a 503's, hold the next calls (a `RateLimitedException`, nothing sent). See the core's
+[usage policies](https://github.com/glitchr-omnisense/omnisong/blob/1.x/docs/policies.md).
+
 ## Responsibility
 
 This package is an independent, unofficial client, not affiliated with, endorsed by or sponsored by

@@ -2,6 +2,9 @@
 
 namespace Omnisong\Odesli;
 
+use Omnisense\Contracts\Policy\Backoff;
+use Omnisense\Contracts\Policy\DeclaresUsagePolicyInterface;
+use Omnisense\Contracts\Policy\UsagePolicy;
 use Omnisong\Catalog\CatalogInterface;
 use Omnisong\Exception\NotSupportedException;
 use Omnisong\Exception\ProviderException;
@@ -13,6 +16,7 @@ use Omnisong\Model\PlatformLinks;
 use Omnisong\Model\Reference;
 use Omnisong\Model\Release;
 use Omnisong\Platform;
+use Omnisong\Policy\CountsRequestsInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -22,10 +26,22 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * is, not what is on it: no tracks, no previews, no list of an artist's
  * releases - and it reads neither a UPC nor an ISRC (the aggregator comes
  * back with the id another catalogue found).
+ *
+ * Its usage policy is policy.json (usagePolicy()). Given the catalogue's
+ * Backoff (its factory's Config::backoff()), a 429's Retry-After, a 503's,
+ * or a RateLimit field with nothing left holds the next calls - each a
+ * RateLimitedException with nothing sent - until the wait is over.
  */
-final class OdesliCatalog implements CatalogInterface
+final class OdesliCatalog implements CatalogInterface, DeclaresUsagePolicyInterface, CountsRequestsInterface
 {
     public const BASE_URI = 'https://api.song.link/v1-alpha.1/';
+
+    /** Odesli's usage policy, as its pages read on the day it says (provenance.verifiedAt). */
+    public const POLICY = __DIR__.'/policy.json';
+
+    private static ?UsagePolicy $policy = null;
+
+    private int $sent = 0;
 
     /** Our platforms as the API's "platform" parameter names them. */
     private const PLATFORMS = [
@@ -42,12 +58,23 @@ final class OdesliCatalog implements CatalogInterface
         private readonly ?string $apiKey = null,
         private readonly ?string $country = null,
         private readonly string $baseUri = self::BASE_URI,
+        private readonly ?Backoff $backoff = null,
     ) {
     }
 
     public function getName(): string
     {
         return 'odesli';
+    }
+
+    public function usagePolicy(): UsagePolicy
+    {
+        return self::$policy ??= UsagePolicy::fromFile(self::POLICY);
+    }
+
+    public function sentRequests(): int
+    {
+        return $this->sent;
     }
 
     public function links(Reference $reference): PlatformLinks
@@ -126,7 +153,12 @@ final class OdesliCatalog implements CatalogInterface
             $query['key'] = $this->apiKey;
         }
 
+        if (0 < $left = $this->backoff?->left() ?? 0) {
+            // Odesli asked to wait: nothing sent until then.
+            throw new RateLimitedException('odesli', $left);
+        }
         try {
+            ++$this->sent;
             $response = $this->http->request('GET', $url = rtrim($this->baseUri, '/').'/links', $options = ['query' => $query, 'headers' => ['Accept' => 'application/json']]);
             $status = $response->getStatusCode();
             $body = $response->getContent(false);
@@ -141,8 +173,13 @@ final class OdesliCatalog implements CatalogInterface
         $code = \is_array($answer) ? (string) ($answer['code'] ?? '') : '';
 
         if (429 === $status) {
-            throw new RateLimitedException('odesli', self::retryAfter($headers['retry-after'][0] ?? null));
+            $wait = self::retryAfter($headers['retry-after'][0] ?? null);
+            $this->backoff?->hold($wait ?? 0, 'odesli answered 429');
+
+            throw new RateLimitedException('odesli', $wait);
         }
+        // A 503's Retry-After, a RateLimit field with nothing left: the next calls wait.
+        $this->backoff?->observe($status, $headers);
         if (404 === $status || (400 === $status && 'could_not_resolve_entity' === $code)) {
             return $this->answers[$memo] = null;
         }
