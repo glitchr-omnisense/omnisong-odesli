@@ -84,14 +84,15 @@ final class OdesliCatalog implements CatalogInterface, DeclaresUsagePolicyInterf
             return PlatformLinks::none();
         }
         $links = [];
-        foreach ((array) ($answer['linksByPlatform'] ?? []) as $key => $link) {
+        $entities = Data::map($answer['entitiesByUniqueId'] ?? null);
+        foreach (Data::map($answer['linksByPlatform'] ?? null) as $key => $link) {
             $platform = Platform::fromOdesli((string) $key);
             if (null === $platform || !\is_array($link) || empty($link['url'])) {
                 continue;
             }
-            $unique = (string) ($link['entityUniqueId'] ?? '');
-            $id = $answer['entitiesByUniqueId'][$unique]['id'] ?? (str_contains($unique, '::') ? substr($unique, strpos($unique, '::') + 2) : null);
-            $links[] = new PlatformLink($platform, (string) $link['url'], null !== $id ? (string) $id : null, null, isset($link['country']) ? (string) $link['country'] : null);
+            $unique = Data::cast($link['entityUniqueId'] ?? '');
+            $id = Data::map($entities[$unique] ?? null)['id'] ?? (str_contains($unique, '::') ? substr($unique, strpos($unique, '::') + 2) : null);
+            $links[] = new PlatformLink($platform, Data::cast($link['url']), null !== $id ? Data::cast($id) : null, null, isset($link['country']) ? Data::cast($link['country']) : null);
         }
 
         return new PlatformLinks($links);
@@ -100,11 +101,13 @@ final class OdesliCatalog implements CatalogInterface, DeclaresUsagePolicyInterf
     public function release(Reference $reference): ?Release
     {
         $answer = $this->ask($reference);
-        if (\is_array($answer['entityUniqueId'] ?? null)) {
+        $unique = $answer['entityUniqueId'] ?? '';
+        if (\is_array($unique)) {
             // No entity is named by a list: an answer of another shape.
             throw new ProviderException('odesli', 'an answer whose entityUniqueId is not a text');
         }
-        $entity = $answer['entitiesByUniqueId'][$answer['entityUniqueId'] ?? ''] ?? null;
+        // As an array offset: an integer or a text as it is, another scalar as PHP turns it into a key.
+        $entity = Data::map($answer['entitiesByUniqueId'] ?? null)[\is_int($unique) || \is_string($unique) ? $unique : (\is_scalar($unique) ? (int) $unique : '')] ?? null;
         if (!\is_array($entity) || empty($entity['title'])) {
             return null;
         }
@@ -117,9 +120,9 @@ final class OdesliCatalog implements CatalogInterface, DeclaresUsagePolicyInterf
         }
 
         return new Release(
-            (string) $entity['title'],
-            isset($entity['artistName']) ? (string) $entity['artistName'] : null,
-            coverUrl: isset($entity['thumbnailUrl']) ? (string) $entity['thumbnailUrl'] : null,
+            Data::cast($entity['title']),
+            isset($entity['artistName']) ? Data::cast($entity['artistName']) : null,
+            coverUrl: isset($entity['thumbnailUrl']) ? Data::cast($entity['thumbnailUrl']) : null,
             type: 'song' === ($entity['type'] ?? null) ? Release::SINGLE : Release::ALBUM,
             links: $links,
             ids: $ids,
@@ -174,7 +177,7 @@ final class OdesliCatalog implements CatalogInterface, DeclaresUsagePolicyInterf
             throw Redaction::withoutArguments(new UnavailableException('odesli', Redaction::text($e->getMessage(), $secrets), null, Redaction::copy($e, $secrets)));
         }
         $answer = json_decode($body, true);
-        $code = \is_array($answer) ? (string) ($answer['code'] ?? '') : '';
+        $code = \is_array($answer) ? Data::cast($answer['code'] ?? '') : '';
 
         if (429 === $status) {
             $wait = self::retryAfter($headers['retry-after'][0] ?? null);
@@ -201,7 +204,7 @@ final class OdesliCatalog implements CatalogInterface, DeclaresUsagePolicyInterf
             throw new UnavailableException('odesli', 'an answer that is not JSON', $status);
         }
 
-        return $this->answers[$memo] = $answer;
+        return $this->answers[$memo] = Data::map($answer);
     }
 
     /** Retry-After in seconds, or as an HTTP date (RFC 9110 §10.2.3): the seconds until then, at least 1. */

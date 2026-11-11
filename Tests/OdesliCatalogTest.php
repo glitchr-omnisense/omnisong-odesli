@@ -24,7 +24,7 @@ final class OdesliCatalogTest extends TestCase
 {
     private const ALBUM = 'https://music.apple.com/de/album/perspectives-concertantes/1793146044';
 
-    /** @var list<array<string, string>> the query of each call */
+    /** @var list<array<mixed>> the query of each call */
     private array $calls = [];
 
     /** @param array<string, mixed> $options */
@@ -47,10 +47,10 @@ final class OdesliCatalogTest extends TestCase
         $links = $this->catalog(null, ['api_key' => 'k_test', 'country' => 'de'])->links(Reference::url(self::ALBUM));
 
         self::assertSame(['apple_music', 'tidal', 'amazon_music', 'itunes', 'amazon'], array_keys($links->toArray()), 'in the order a site shows them; Yandex is not one of ours');
-        self::assertSame('https://listen.tidal.com/album/414051173', $links->get(Platform::TIDAL)->url);
+        self::assertSame('https://listen.tidal.com/album/414051173', $links->get(Platform::TIDAL)?->url);
         self::assertSame('414051173', $links->get(Platform::TIDAL)->id, 'the platform\'s own id');
-        self::assertSame('B0DV5P8V78', $links->get(Platform::AMAZON_MUSIC)->id);
-        self::assertSame('1793146044', $links->get(Platform::APPLE_MUSIC)->id);
+        self::assertSame('B0DV5P8V78', $links->get(Platform::AMAZON_MUSIC)?->id);
+        self::assertSame('1793146044', $links->get(Platform::APPLE_MUSIC)?->id);
         self::assertSame('DE', $links->get(Platform::APPLE_MUSIC)->country);
         self::assertSame(['url' => self::ALBUM, 'userCountry' => 'DE', 'key' => 'k_test'], $this->calls[0]);
     }
@@ -69,9 +69,11 @@ final class OdesliCatalogTest extends TestCase
         $catalog = $this->catalog();
         $release = $catalog->release(Reference::url(self::ALBUM));
 
+        self::assertNotNull($release);
+        self::assertNotNull($release->links);
         self::assertSame('Perspectives Concertantes', $release->title);
-        self::assertStringStartsWith('Anaelle Tourret, NDR Elbphilharmonie Orchestra', $release->artist);
-        self::assertStringEndsWith('/cover.jpg/512x512bb.jpg', $release->coverUrl);
+        self::assertStringStartsWith('Anaelle Tourret, NDR Elbphilharmonie Orchestra', (string) $release->artist);
+        self::assertStringEndsWith('/cover.jpg/512x512bb.jpg', (string) $release->coverUrl);
         self::assertSame(Release::ALBUM, $release->type);
         self::assertSame([], $release->tracks);
         self::assertSame('1793146044', $release->ids['itunes'], 'what the next catalogue can be asked by');

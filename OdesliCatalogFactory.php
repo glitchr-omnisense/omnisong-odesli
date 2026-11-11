@@ -31,7 +31,7 @@ final class OdesliCatalogFactory extends CatalogFactory
 
     protected function build(Config $c): CatalogInterface
     {
-        return new OdesliCatalog($this->http ?? HttpClient::create(), self::text($c, 'api_key'), self::text($c, 'country'), (string) ($c['base_uri'] ?: OdesliCatalog::BASE_URI), $c->backoff());
+        return new OdesliCatalog($this->http ?? HttpClient::create(), self::text($c, 'api_key'), self::text($c, 'country'), Data::cast($c['base_uri'] ?: OdesliCatalog::BASE_URI), $c->backoff());
     }
 
     /**
