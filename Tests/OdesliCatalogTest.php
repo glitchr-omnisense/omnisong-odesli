@@ -2,6 +2,7 @@
 
 namespace Omnisong\Odesli\Tests;
 
+use Omnisong\Exception\InvalidConfigException;
 use Omnisong\Exception\NotSupportedException;
 use Omnisong\Exception\ProviderException;
 use Omnisong\Exception\RateLimitedException;
@@ -158,6 +159,19 @@ final class OdesliCatalogTest extends TestCase
         $this->expectException(ProviderException::class);
         $this->expectExceptionMessage('[odesli] ');
         $this->catalog(new MockResponse((string) json_encode($answer)))->release(Reference::url(self::ALBUM));
+    }
+
+    /** An api_key or a country that is a list is a misconfiguration the factory says, not a TypeError. */
+    public function testAnApiKeyOrACountryThatIsAListIsAConfigError(): void
+    {
+        foreach (['api_key', 'country'] as $option) {
+            try {
+                $this->catalog(null, [$option => ['DE']]);
+                self::fail('InvalidConfigException expected');
+            } catch (InvalidConfigException $e) {
+                self::assertStringContainsString($option, $e->getMessage());
+            }
+        }
     }
 
     public function testAnyOtherRefusalIsTheProvidersError(): void

@@ -5,6 +5,7 @@ namespace Omnisong\Odesli;
 use Omnisong\Catalog\CatalogFactory;
 use Omnisong\Catalog\CatalogInterface;
 use Omnisong\Config;
+use Omnisong\Exception\InvalidConfigException;
 use Symfony\Component\HttpClient\HttpClient;
 
 /**
@@ -30,6 +31,25 @@ final class OdesliCatalogFactory extends CatalogFactory
 
     protected function build(Config $c): CatalogInterface
     {
-        return new OdesliCatalog($this->http ?? HttpClient::create(), $c['api_key'] ?: null, $c['country'] ?: null, (string) ($c['base_uri'] ?: OdesliCatalog::BASE_URI), $c->backoff());
+        return new OdesliCatalog($this->http ?? HttpClient::create(), self::text($c, 'api_key'), self::text($c, 'country'), (string) ($c['base_uri'] ?: OdesliCatalog::BASE_URI), $c->backoff());
+    }
+
+    /**
+     * An option the catalogue takes as a text: null when empty, a scalar as
+     * PHP gives it to a string.
+     *
+     * @throws InvalidConfigException a list, or an object that is no text
+     */
+    private static function text(Config $c, string $key): ?string
+    {
+        $value = $c->get($key);
+        if (!$value) {
+            return null;
+        }
+        if (\is_scalar($value) || $value instanceof \Stringable) {
+            return (string) $value;
+        }
+
+        throw new InvalidConfigException(\sprintf('The "odesli" catalogue\'s %s is %s, not a text.', $key, get_debug_type($value)));
     }
 }
