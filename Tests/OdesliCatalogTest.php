@@ -151,6 +151,15 @@ final class OdesliCatalogTest extends TestCase
         $this->catalog(new MockResponse('{"statusCode":401,"code":"PUBLIC_API_ACCESS_DEPRECATED"}', ['http_code' => 401]))->links(Reference::url(self::ALBUM));
     }
 
+    /** An answer whose entityUniqueId is a list names no entity it can be read by: a ProviderException, not a TypeError. */
+    public function testAnEntityUniqueIdThatIsAListIsAProviderException(): void
+    {
+        $answer = ['entityUniqueId' => ['ITUNES_ALBUM::1793146044'], 'entitiesByUniqueId' => ['ITUNES_ALBUM::1793146044' => ['id' => '1793146044', 'title' => 'Perspectives Concertantes']], 'linksByPlatform' => []];
+        $this->expectException(ProviderException::class);
+        $this->expectExceptionMessage('[odesli] ');
+        $this->catalog(new MockResponse((string) json_encode($answer)))->release(Reference::url(self::ALBUM));
+    }
+
     public function testAnyOtherRefusalIsTheProvidersError(): void
     {
         try {

@@ -15,3 +15,4 @@
   chain keeps its arguments. Needs omnisense/omnisong's `Http\Redaction`.
 - `Retry-After` written as an HTTP date gives the seconds until then (at least 1), where it gave 0.
 - composer.json's description no longer claims an ISRC or a UPC, which the package does not read.
+- An answer whose `entityUniqueId` is a list makes the release a `ProviderException`, where reading the entity by it threw a `TypeError`.

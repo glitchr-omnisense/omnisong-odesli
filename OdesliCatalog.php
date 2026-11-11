@@ -100,6 +100,10 @@ final class OdesliCatalog implements CatalogInterface, DeclaresUsagePolicyInterf
     public function release(Reference $reference): ?Release
     {
         $answer = $this->ask($reference);
+        if (\is_array($answer['entityUniqueId'] ?? null)) {
+            // No entity is named by a list: an answer of another shape.
+            throw new ProviderException('odesli', 'an answer whose entityUniqueId is not a text');
+        }
         $entity = $answer['entitiesByUniqueId'][$answer['entityUniqueId'] ?? ''] ?? null;
         if (!\is_array($entity) || empty($entity['title'])) {
             return null;
