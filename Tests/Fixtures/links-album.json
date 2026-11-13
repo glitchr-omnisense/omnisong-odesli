@@ -1,14 +1,14 @@
 {
-  "entityUniqueId": "ITUNES_ALBUM::1793146044",
+  "entityUniqueId": "ITUNES_ALBUM::1644892939",
   "userCountry": "DE",
-  "pageUrl": "https://album.link/i/1793146044",
+  "pageUrl": "https://album.link/i/1644892939",
   "entitiesByUniqueId": {
-    "ITUNES_ALBUM::1793146044": {
-      "id": "1793146044",
+    "ITUNES_ALBUM::1644892939": {
+      "id": "1644892939",
       "type": "album",
-      "title": "Perspectives Concertantes",
-      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
-      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
+      "title": "Beethoven: Symphonies Nos. 5 & 7",
+      "artistName": "Wiener Philharmoniker & Carlos Kleiber",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b7/b0/a5/b7b0a5d5-e487-4dcb-f0b5-04d16c78f693/22UMGIM89320.rgb.jpg/512x512bb.jpg",
       "thumbnailWidth": 512,
       "thumbnailHeight": 512,
       "apiProvider": "itunes",
@@ -17,39 +17,25 @@
         "itunes"
       ]
     },
-    "AMAZON_ALBUM::B0DV5P8V78": {
-      "id": "B0DV5P8V78",
+    "DEEZER_ALBUM::361794007": {
+      "id": "361794007",
       "type": "album",
-      "title": "Perspectives Concertantes",
-      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
-      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
-      "thumbnailWidth": 512,
-      "thumbnailHeight": 512,
-      "apiProvider": "amazon",
+      "title": "Beethoven: Symphonies Nos. 5 & 7",
+      "artistName": "Wiener Philharmoniker",
+      "thumbnailUrl": "https://cdn-images.dzcdn.net/images/cover/2ac30c0a000f97adb41a05c0cc460d5d/500x500-000000-80-0-0.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "deezer",
       "platforms": [
-        "amazonMusic",
-        "amazonStore"
+        "deezer"
       ]
     },
-    "TIDAL_ALBUM::414051173": {
-      "id": "414051173",
+    "YANDEX_ALBUM::10000001": {
+      "id": "10000001",
       "type": "album",
-      "title": "Perspectives Concertantes",
-      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
-      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
-      "thumbnailWidth": 512,
-      "thumbnailHeight": 512,
-      "apiProvider": "tidal",
-      "platforms": [
-        "tidal"
-      ]
-    },
-    "YANDEX_ALBUM::35165246": {
-      "id": "35165246",
-      "type": "album",
-      "title": "Perspectives Concertantes",
-      "artistName": "Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni",
-      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg",
+      "title": "Beethoven: Symphonies Nos. 5 & 7",
+      "artistName": "Wiener Philharmoniker & Carlos Kleiber",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b7/b0/a5/b7b0a5d5-e487-4dcb-f0b5-04d16c78f693/22UMGIM89320.rgb.jpg/512x512bb.jpg",
       "thumbnailWidth": 512,
       "thumbnailHeight": 512,
       "apiProvider": "yandex",
@@ -61,37 +47,27 @@
   "linksByPlatform": {
     "appleMusic": {
       "country": "DE",
-      "url": "https://geo.music.apple.com/de/album/_/1793146044?mt=1&app=music&ls=1",
-      "nativeAppUriMobile": "music://itunes.apple.com/de/album/_/1793146044?mt=1&app=music&ls=1",
-      "nativeAppUriDesktop": "itmss://itunes.apple.com/de/album/_/1793146044?mt=1&app=music&ls=1",
-      "entityUniqueId": "ITUNES_ALBUM::1793146044"
+      "url": "https://geo.music.apple.com/de/album/_/1644892939?mt=1&app=music&ls=1",
+      "nativeAppUriMobile": "music://itunes.apple.com/de/album/_/1644892939?mt=1&app=music&ls=1",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/de/album/_/1644892939?mt=1&app=music&ls=1",
+      "entityUniqueId": "ITUNES_ALBUM::1644892939"
+    },
+    "deezer": {
+      "country": "DE",
+      "url": "https://www.deezer.com/album/361794007",
+      "entityUniqueId": "DEEZER_ALBUM::361794007"
     },
     "itunes": {
       "country": "DE",
-      "url": "https://geo.music.apple.com/de/album/_/1793146044?mt=1&app=itunes&ls=1",
-      "nativeAppUriMobile": "itmss://itunes.apple.com/de/album/_/1793146044?mt=1&app=itunes&ls=1",
-      "nativeAppUriDesktop": "itmss://itunes.apple.com/de/album/_/1793146044?mt=1&app=itunes&ls=1",
-      "entityUniqueId": "ITUNES_ALBUM::1793146044"
-    },
-    "amazonMusic": {
-      "country": "DE",
-      "url": "https://music.amazon.com/albums/B0DV5P8V78",
-      "entityUniqueId": "AMAZON_ALBUM::B0DV5P8V78"
-    },
-    "amazonStore": {
-      "country": "US",
-      "url": "https://amazon.com/dp/B0DV5P8V78",
-      "entityUniqueId": "AMAZON_ALBUM::B0DV5P8V78"
-    },
-    "tidal": {
-      "country": "DE",
-      "url": "https://listen.tidal.com/album/414051173",
-      "entityUniqueId": "TIDAL_ALBUM::414051173"
+      "url": "https://geo.music.apple.com/de/album/_/1644892939?mt=1&app=itunes&ls=1",
+      "nativeAppUriMobile": "itmss://itunes.apple.com/de/album/_/1644892939?mt=1&app=itunes&ls=1",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/de/album/_/1644892939?mt=1&app=itunes&ls=1",
+      "entityUniqueId": "ITUNES_ALBUM::1644892939"
     },
     "yandex": {
       "country": "RU",
-      "url": "https://music.yandex.ru/album/35165246",
-      "entityUniqueId": "YANDEX_ALBUM::35165246"
+      "url": "https://music.yandex.ru/album/10000001",
+      "entityUniqueId": "YANDEX_ALBUM::10000001"
     }
   }
 }

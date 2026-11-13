@@ -91,7 +91,7 @@ use Symfony\Component\HttpClient\HttpClient;
 
 $odesli = (new OdesliCatalogFactory(HttpClient::create()))->create(['api_key' => getenv('ODESLI_API_KEY'), 'country' => 'DE']);
 
-$reference = Reference::url('https://music.apple.com/de/album/perspectives-concertantes/1793146044');
+$reference = Reference::url('https://music.apple.com/de/album/beethoven-symphonies-nos-5-7/1644892939');
 foreach ($odesli->links($reference) as $value => $link) {
     printf("  %-13s %-28s id=%s\n", $value, $link->url, $link->id);
 }
@@ -100,18 +100,16 @@ printf("%s | %s | %s | %d tracks | %s\n", $release->title, $release->artist, $re
 $odesli->links(Reference::id(Platform::SPOTIFY, '4aawyAB9vmqN3uQ7FjRGTy'));
 ```
 
-Run on 2026-10-26 on a `MockHttpClient` serving the package's fixture (`Tests/Fixtures/links-album.json`,
-written from what album.link showed on 2026-10-03) instead of `HttpClient::create()`, with a test
+Run on 2026-11-14 on a `MockHttpClient` serving the package's fixture (`Tests/Fixtures/links-album.json`,
+written that day from what album.link and Deezer's API showed) instead of `HttpClient::create()`, with a test
 key; the `>` lines are the mock's log of each request:
 
 ```
-> https://api.song.link/v1-alpha.1/links?url=https://music.apple.com/de/album/perspectives-concertantes/1793146044&userCountry=DE&key=test-key
-  apple_music   https://geo.music.apple.com/de/album/_/1793146044?mt=1&app=music&ls=1 id=1793146044
-  tidal         https://listen.tidal.com/album/414051173 id=414051173
-  amazon_music  https://music.amazon.com/albums/B0DV5P8V78 id=B0DV5P8V78
-  itunes        https://geo.music.apple.com/de/album/_/1793146044?mt=1&app=itunes&ls=1 id=1793146044
-  amazon        https://amazon.com/dp/B0DV5P8V78 id=B0DV5P8V78
-Perspectives Concertantes | Anaelle Tourret, NDR Elbphilharmonie Orchestra, Vasily Petrenko, Stuttgarter Kammerorchester & Bar Avni | album | 0 tracks | https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/84/2e/03842ead-96bc-0e38-6446-f61a9bfde85c/cover.jpg/512x512bb.jpg
+> https://api.song.link/v1-alpha.1/links?url=https://music.apple.com/de/album/beethoven-symphonies-nos-5-7/1644892939&userCountry=DE&key=test-key
+  apple_music   https://geo.music.apple.com/de/album/_/1644892939?mt=1&app=music&ls=1 id=1644892939
+  deezer        https://www.deezer.com/album/361794007 id=361794007
+  itunes        https://geo.music.apple.com/de/album/_/1644892939?mt=1&app=itunes&ls=1 id=1644892939
+Beethoven: Symphonies Nos. 5 & 7 | Wiener Philharmoniker & Carlos Kleiber | album | 0 tracks | https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b7/b0/a5/b7b0a5d5-e487-4dcb-f0b5-04d16c78f693/22UMGIM89320.rgb.jpg/512x512bb.jpg
 > https://api.song.link/v1-alpha.1/links?platform=spotify&type=album&id=4aawyAB9vmqN3uQ7FjRGTy&userCountry=DE&key=test-key
 ```
 
@@ -148,8 +146,9 @@ The package's `composer.json` description says it reads "an ISRC, a UPC": it rea
 
 ## Verified, and not
 
-The package's tests (`Tests/OdesliCatalogTest.php`, 9 tests) pass (2026-10-26, PHP 8.4) on one
-fixture written from album.link's page for album 1793146044, not from an API answer: song.link's
+The package's tests (`Tests/OdesliCatalogTest.php`, 9 tests) pass (2026-11-14, PHP 8.4) on one
+fixture written from album.link's page for album 1644892939 and Deezer's API (its Yandex entry
+invented), not from an API answer: song.link's
 API was never answered with a key for this package (it answers 401 without one). A URL gives the
 album on every platform; an id is asked by platform, type and id; the release has no tracks;
 neither a UPC nor an ISRC is read; unknown is empty; 429 says when to come back; down, unreachable

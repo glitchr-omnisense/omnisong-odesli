@@ -16,13 +16,15 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * Fixtures/links-album.json: "Perspectives Concertantes" (Anaëlle Tourret) in
- * the API's v1-alpha.1 shape, written from what album.link/i/1793146044 showed
- * on 2026-10-03 - the API itself answers 401 without a key.
+ * Fixtures/links-album.json: "Beethoven: Symphonies Nos. 5 & 7" (Wiener
+ * Philharmoniker & Carlos Kleiber) in the API's v1-alpha.1 shape, written on
+ * 2026-11-14 from what album.link/i/1644892939 showed (Apple) and Deezer's API
+ * (album 361794007) - the API itself answers 401 without a key; its Yandex
+ * entry is invented, a platform omnisong does not map.
  */
 final class OdesliCatalogTest extends TestCase
 {
-    private const ALBUM = 'https://music.apple.com/de/album/perspectives-concertantes/1793146044';
+    private const ALBUM = 'https://music.apple.com/de/album/beethoven-symphonies-nos-5-7/1644892939';
 
     /** @var list<array<mixed>> the query of each call */
     private array $calls = [];
@@ -46,11 +48,10 @@ final class OdesliCatalogTest extends TestCase
     {
         $links = $this->catalog(null, ['api_key' => 'k_test', 'country' => 'de'])->links(Reference::url(self::ALBUM));
 
-        self::assertSame(['apple_music', 'tidal', 'amazon_music', 'itunes', 'amazon'], array_keys($links->toArray()), 'in the order a site shows them; Yandex is not one of ours');
-        self::assertSame('https://listen.tidal.com/album/414051173', $links->get(Platform::TIDAL)?->url);
-        self::assertSame('414051173', $links->get(Platform::TIDAL)->id, 'the platform\'s own id');
-        self::assertSame('B0DV5P8V78', $links->get(Platform::AMAZON_MUSIC)?->id);
-        self::assertSame('1793146044', $links->get(Platform::APPLE_MUSIC)?->id);
+        self::assertSame(['apple_music', 'deezer', 'itunes'], array_keys($links->toArray()), 'in the order a site shows them; Yandex is not one of ours');
+        self::assertSame('https://www.deezer.com/album/361794007', $links->get(Platform::DEEZER)?->url);
+        self::assertSame('361794007', $links->get(Platform::DEEZER)->id, 'the platform\'s own id');
+        self::assertSame('1644892939', $links->get(Platform::APPLE_MUSIC)?->id);
         self::assertSame('DE', $links->get(Platform::APPLE_MUSIC)->country);
         self::assertSame(['url' => self::ALBUM, 'userCountry' => 'DE', 'key' => 'k_test'], $this->calls[0]);
     }
@@ -58,10 +59,10 @@ final class OdesliCatalogTest extends TestCase
     public function testAPlatformsIdIsAskedByPlatformTypeAndId(): void
     {
         $catalog = $this->catalog();
-        $links = $catalog->links(Reference::id(Platform::ITUNES, '1793146044', Reference::ALBUM, 'FR'));
+        $links = $catalog->links(Reference::id(Platform::ITUNES, '1644892939', Reference::ALBUM, 'FR'));
 
-        self::assertCount(5, $links);
-        self::assertSame(['platform' => 'itunes', 'type' => 'album', 'id' => '1793146044', 'userCountry' => 'FR'], $this->calls[0], 'no key: none sent');
+        self::assertCount(3, $links);
+        self::assertSame(['platform' => 'itunes', 'type' => 'album', 'id' => '1644892939', 'userCountry' => 'FR'], $this->calls[0], 'no key: none sent');
     }
 
     public function testTheReleaseIsItsTitleArtistCoverAndLinksWithoutTracks(): void
@@ -71,13 +72,13 @@ final class OdesliCatalogTest extends TestCase
 
         self::assertNotNull($release);
         self::assertNotNull($release->links);
-        self::assertSame('Perspectives Concertantes', $release->title);
-        self::assertStringStartsWith('Anaelle Tourret, NDR Elbphilharmonie Orchestra', (string) $release->artist);
-        self::assertStringEndsWith('/cover.jpg/512x512bb.jpg', (string) $release->coverUrl);
+        self::assertSame('Beethoven: Symphonies Nos. 5 & 7', $release->title);
+        self::assertStringStartsWith('Wiener Philharmoniker & Carlos Kleiber', (string) $release->artist);
+        self::assertStringEndsWith('/22UMGIM89320.rgb.jpg/512x512bb.jpg', (string) $release->coverUrl);
         self::assertSame(Release::ALBUM, $release->type);
         self::assertSame([], $release->tracks);
-        self::assertSame('1793146044', $release->ids['itunes'], 'what the next catalogue can be asked by');
-        self::assertTrue($release->links->has(Platform::TIDAL));
+        self::assertSame('1644892939', $release->ids['itunes'], 'what the next catalogue can be asked by');
+        self::assertTrue($release->links->has(Platform::DEEZER));
 
         $catalog->links(Reference::url(self::ALBUM));
         self::assertCount(1, $this->calls, 'asked once: the release and its links are one answer');
@@ -86,7 +87,7 @@ final class OdesliCatalogTest extends TestCase
     public function testNeitherAUpcNorAnIsrcIsRead(): void
     {
         $catalog = $this->catalog();
-        foreach ([Reference::upc('4015372820954'), Reference::isrc('DEAR41234567'), Reference::id(Platform::QOBUZ, 'abc')] as $reference) {
+        foreach ([Reference::upc('028948637751'), Reference::isrc('QZZZZ1234567'), Reference::id(Platform::QOBUZ, 'abc')] as $reference) {
             try {
                 $catalog->links($reference);
                 self::fail('NotSupportedException expected for '.$reference);
@@ -96,7 +97,7 @@ final class OdesliCatalogTest extends TestCase
         self::assertSame([], $this->calls);
 
         $this->expectException(NotSupportedException::class);
-        $catalog->releases('Anaëlle Tourret');
+        $catalog->releases('Carlos Kleiber');
     }
 
     public function testUnknownIsEmptyNotAnError(): void
@@ -157,7 +158,7 @@ final class OdesliCatalogTest extends TestCase
     /** An answer whose entityUniqueId is a list names no entity it can be read by: a ProviderException, not a TypeError. */
     public function testAnEntityUniqueIdThatIsAListIsAProviderException(): void
     {
-        $answer = ['entityUniqueId' => ['ITUNES_ALBUM::1793146044'], 'entitiesByUniqueId' => ['ITUNES_ALBUM::1793146044' => ['id' => '1793146044', 'title' => 'Perspectives Concertantes']], 'linksByPlatform' => []];
+        $answer = ['entityUniqueId' => ['ITUNES_ALBUM::1644892939'], 'entitiesByUniqueId' => ['ITUNES_ALBUM::1644892939' => ['id' => '1644892939', 'title' => 'Beethoven: Symphonies Nos. 5 & 7']], 'linksByPlatform' => []];
         $this->expectException(ProviderException::class);
         $this->expectExceptionMessage('[odesli] ');
         $this->catalog(new MockResponse((string) json_encode($answer)))->release(Reference::url(self::ALBUM));

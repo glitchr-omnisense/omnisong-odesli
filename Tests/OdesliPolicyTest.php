@@ -19,7 +19,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
  */
 final class OdesliPolicyTest extends TestCase
 {
-    private const ALBUM = 'https://music.apple.com/de/album/perspectives-concertantes/1793146044';
+    private const ALBUM = 'https://music.apple.com/de/album/beethoven-symphonies-nos-5-7/1644892939';
 
     private int $sent = 0;
 
@@ -101,7 +101,7 @@ final class OdesliPolicyTest extends TestCase
         $registry = $this->registry([], ['policy' => ['rateLimits' => [['max' => 1, 'window' => 'minute']]]]);
 
         try {
-            $registry->guarded('odesli')->links(Reference::upc('4015372820954'));
+            $registry->guarded('odesli')->links(Reference::upc('028948637751'));
             self::fail('Odesli reads no UPC.');
         } catch (\Omnisong\Exception\NotSupportedException) {
         }
