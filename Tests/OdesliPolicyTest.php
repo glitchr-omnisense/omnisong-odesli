@@ -49,7 +49,7 @@ final class OdesliPolicyTest extends TestCase
         self::assertSame('2026-11-10', $policy->provenance->verifiedAt);
         self::assertSame('unknown', $policy->rights->commercial->value);
         self::assertEquals($policy, $registry->policy('odesli'));
-        self::assertStringContainsString('"extra": {"omnisense": {"policy": "policy.json"}}', (string) file_get_contents(__DIR__.'/../composer.json'), 'declared for omnisense-policies');
+        self::assertStringContainsString('"omnisense": {"policy": "policy.json"}', (string) file_get_contents(__DIR__.'/../composer.json'), 'declared for omnisense-policies');
     }
 
     public function testA429sRetryAfterHoldsTheNextCallsWithNothingSent(): void

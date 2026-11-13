@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-13
+
+The first stable release.
+
+### Release
+
+- Requires `omnisense/contracts: ^1.0`, `omnisense/omnisong: ^1.0`: stable versions, so `composer
+  require omnisong/odesli` installs in a project at Composer's default minimum-stability.
+  `extra.branch-alias` names 1.x (`1.x-dev`); the CI (`.github/workflows/ci.yml`, glitchr-studio/ci's
+  php-package.yml) is callable, and `release.yml` runs it on a tag before glitchr-studio/ci's
+  php-release.yml.
+
 ### Added
 
 - Its usage policy as data, `policy.json` (`extra.omnisense.policy`, `usagePolicy()`), verified 2026-11-10: nothing readable that day, so limits and rights unknown, a key required (the keyless access answers 401). The factory gives the catalogue its wait (omnisense/contracts' `Backoff`): a 429's `Retry-After`, a 503's, or a `RateLimit` field with nothing left holds the next calls, a `RateLimitedException` with nothing sent; `sentRequests()` counts the requests sent, so the registry's guard counts no answer held in memory. Requires `omnisense/contracts`. PHPStan at level max, the existing errors in `phpstan-baseline.neon`.

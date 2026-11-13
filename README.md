@@ -40,6 +40,19 @@ PUBLIC_API_ACCESS_DEPRECATED` (seen 2026-10-03). Ask developers@song.link for a 
 `api_key` (`ODESLI_API_KEY`); without it this catalogue is skipped and named in `$incomplete`, and
 the release still comes with iTunes' tracks and Apple's links.
 
+## Install
+
+```sh
+composer require omnisong/odesli
+```
+
+It requires `omnisense/omnisong` `^1.0`, installed with it. A real call needs: **an Odesli API key**
+(asked from developers@song.link): since 2026 a call without one answers 401. Without it, the
+aggregator skips this catalogue and names it in `$incomplete`. With no account, its tests run on
+recorded answers (a `MockHttpClient`), and
+[omnisense/omnisong](https://github.com/glitchr-omnisense/omnisong#plain-php)'s README has a first
+call that runs without one.
+
 ## Responsibility
 
 This package is an independent, unofficial client: it is not affiliated with, endorsed by or
